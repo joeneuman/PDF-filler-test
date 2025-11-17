@@ -37,7 +37,9 @@ router.post('/upload', upload.single('pdf'), validatePdfMagicBytes, async (req: 
     }
 
     // Save PDF
+    console.log('Saving PDF with pdfId:', pdfId);
     await savePdf(pdfId, pdfBytes);
+    console.log('PDF saved successfully');
 
     // Create and save schema
     const schema: SchemaDocument = {
@@ -49,7 +51,9 @@ router.post('/upload', upload.single('pdf'), validatePdfMagicBytes, async (req: 
         modified: now,
       },
     };
+    console.log('Saving schema for pdfId:', pdfId);
     await saveSchema(schema);
+    console.log('Schema saved successfully');
 
     const response: UploadResponse = {
       pdfId,
@@ -72,15 +76,18 @@ router.post('/upload', upload.single('pdf'), validatePdfMagicBytes, async (req: 
 router.get('/schema/:pdfId', async (req: Request, res: Response) => {
   try {
     const { pdfId } = req.params;
+    console.log('Getting schema for pdfId:', pdfId);
     const schema = await getSchema(pdfId);
     
     if (!schema) {
+      console.error('Schema not found for pdfId:', pdfId);
       return res.status(404).json({
         code: 'NOT_FOUND',
         message: 'PDF schema not found',
       });
     }
 
+    console.log('Schema found for pdfId:', pdfId);
     res.json(schema);
   } catch (error: any) {
     console.error('Get schema error:', error);
