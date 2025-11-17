@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getSchema, updateSchema } from '../api';
 import type { SchemaDocument, PdfField } from '../types';
 import FieldEditor from '../components/FieldEditor';
@@ -7,7 +7,6 @@ import { useDebounce } from '../hooks/useDebounce';
 
 export default function BuilderPage() {
   const { pdfId } = useParams<{ pdfId: string }>();
-  const navigate = useNavigate();
   const [schema, setSchema] = useState<SchemaDocument | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

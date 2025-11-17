@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { SchemaDocument, UploadResponse, PdfField } from './types';
+import type { SchemaDocument, UploadResponse } from './types';
 
 const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 

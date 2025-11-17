@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { getSchema, fillPdf } from '../api';
 import type { SchemaDocument } from '../types';
@@ -7,7 +7,6 @@ import FormRenderer from '../components/FormRenderer';
 
 export default function FillerPage() {
   const { pdfId } = useParams<{ pdfId: string }>();
-  const navigate = useNavigate();
   const [schema, setSchema] = useState<SchemaDocument | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

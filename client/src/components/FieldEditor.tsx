@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -26,7 +25,7 @@ interface FieldEditorProps {
 
 function SortableFieldItem({
   field,
-  index,
+  index: _index,
   onUpdate,
 }: {
   field: PdfField;
