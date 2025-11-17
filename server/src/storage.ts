@@ -70,7 +70,14 @@ export async function saveSchema(schema: SchemaDocument): Promise<void> {
   await ensureDirectories();
   const filePath = join(SCHEMAS_DIR, `${schema.pdfId}.json`);
   console.log('Saving schema to:', filePath);
+  
+  // Write schema file
   await fs.writeFile(filePath, JSON.stringify(schema, null, 2), 'utf-8');
+  
+  // Ensure file is fully written and synced to disk
+  const fileHandle = await fs.open(filePath, 'r+');
+  await fileHandle.sync();
+  await fileHandle.close();
   
   // Update index
   const index = await loadIndex();
@@ -89,6 +96,15 @@ export async function saveSchema(schema: SchemaDocument): Promise<void> {
   }
   
   await saveIndex(index);
+  
+  // Verify the file was written correctly
+  try {
+    const verify = await fs.readFile(filePath, 'utf-8');
+    console.log('Schema file verified, size:', verify.length);
+  } catch (error) {
+    console.error('Failed to verify schema file:', error);
+    throw error;
+  }
 }
 
 export async function getSchema(pdfId: string): Promise<SchemaDocument | null> {
