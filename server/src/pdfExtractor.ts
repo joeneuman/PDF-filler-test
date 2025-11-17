@@ -131,7 +131,8 @@ export async function fillPdf(
         }
         (f as any).setText(textValue);
       } else if (ctor === 'PDFCheckBox') {
-        const truthy = val === true || val === 'true' || val === 1 || val === '1' || val === 'on' || val === 'yes';
+        const valStr = String(val);
+        const truthy = val === true || valStr === 'true' || valStr === '1' || valStr === 'on' || valStr === 'yes';
         truthy ? (f as any).check() : (f as any).uncheck();
       } else if (ctor === 'PDFRadioGroup') {
         if (typeof val === 'string') {
