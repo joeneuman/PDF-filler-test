@@ -6,10 +6,13 @@ import type { SchemaDocument, PdfField } from './types.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const STORAGE_DIR = process.env.STORAGE_DIR || join(__dirname, '..', 'storage');
+// Use absolute path for storage - in production, use process.cwd() or explicit path
+const STORAGE_DIR = process.env.STORAGE_DIR || join(process.cwd(), 'storage');
 const PDFS_DIR = join(STORAGE_DIR, 'pdfs');
 const SCHEMAS_DIR = join(STORAGE_DIR, 'schemas');
 const INDEX_FILE = join(STORAGE_DIR, 'index.json');
+
+console.log('Storage directory:', STORAGE_DIR);
 
 interface IndexEntry {
   pdfId: string;
@@ -66,6 +69,7 @@ export async function getPdf(pdfId: string): Promise<Uint8Array | null> {
 export async function saveSchema(schema: SchemaDocument): Promise<void> {
   await ensureDirectories();
   const filePath = join(SCHEMAS_DIR, `${schema.pdfId}.json`);
+  console.log('Saving schema to:', filePath);
   await fs.writeFile(filePath, JSON.stringify(schema, null, 2), 'utf-8');
   
   // Update index
@@ -90,9 +94,11 @@ export async function saveSchema(schema: SchemaDocument): Promise<void> {
 export async function getSchema(pdfId: string): Promise<SchemaDocument | null> {
   try {
     const filePath = join(SCHEMAS_DIR, `${pdfId}.json`);
+    console.log('Looking for schema at:', filePath);
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data);
-  } catch {
+  } catch (error) {
+    console.error('Error reading schema:', error);
     return null;
   }
 }
